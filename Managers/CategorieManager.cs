@@ -4,6 +4,7 @@ using System.Data;
 using System.Data.SqlClient;
 using BibliotecaScolara.Models;
 using BibliotecaScolara.Database;
+using BibliotecaScolara.Utilities;
 
 namespace BibliotecaScolara.Managers
 {
@@ -80,10 +81,17 @@ namespace BibliotecaScolara.Managers
         }
 
         /// <summary>
-        /// Șterge o categorie
+        /// Șterge o categorie (cu verificare)
         /// </summary>
         public static bool Delete(int id)
         {
+            // Verifică dacă categoria are cărți
+            if (HasBooks(id))
+            {
+                Mesaje.ImpossibleDelete(Constante.Erori.CATEGORIE_ARE_CARTI);
+                return false;
+            }
+
             string query = "DELETE FROM Categorii WHERE IDCategorie = @ID";
             SqlParameter[] parameters = new[] { new SqlParameter("@ID", id) };
 
@@ -112,6 +120,18 @@ namespace BibliotecaScolara.Managers
         }
 
         /// <summary>
+        /// Verifică dacă categoria are cărți
+        /// </summary>
+        private static bool HasBooks(int categorieId)
+        {
+            string query = "SELECT COUNT(*) FROM Carti WHERE IDCategorie = @ID";
+            SqlParameter[] parameters = new[] { new SqlParameter("@ID", categorieId) };
+            
+            object result = DatabaseConnection.ExecuteScalar(query, parameters);
+            return result != null && int.TryParse(result.ToString(), out int count) && count > 0;
+        }
+
+        /// <summary>
         /// Mapează DataRow la obiect Categorie
         /// </summary>
         private static Categorie MapToCategorie(DataRow row)
@@ -120,7 +140,8 @@ namespace BibliotecaScolara.Managers
             {
                 IDCategorie = (int)row["IDCategorie"],
                 NumeCategorie = row["NumeCategorie"].ToString(),
-                Descriere = row["Descriere"].ToString()
+                Descriere = row["Descriere"].ToString(),
+                DataAdaugarii = (DateTime)row["DataAdaugarii"]
             };
         }
     }

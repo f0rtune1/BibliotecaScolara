@@ -1,0 +1,13 @@
+*.exe
+*.dll
+*.pdb
+bin/
+obj/
+.vs/
+*.user
+*.suo
+*.config
+log.txt
+temp/
+.idea/
+*.iml

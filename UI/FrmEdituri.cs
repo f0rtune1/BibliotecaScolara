@@ -44,6 +44,7 @@ namespace BibliotecaScolara.UI
                 dataGridViewEdituri.Columns["NumeEditura"].Width = 150;
                 dataGridViewEdituri.Columns["Adresa"].Width = 200;
                 dataGridViewEdituri.Columns["Telefon"].Width = 100;
+                dataGridViewEdituri.Columns["Email"].Width = 150;
             }
         }
 
@@ -144,7 +145,7 @@ namespace BibliotecaScolara.UI
             this.lblCauta.AutoSize = true;
             this.lblCauta.Location = new System.Drawing.Point(12, 23);
             this.lblCauta.Name = "lblCauta";
-            this.lblCauta.Size = new System.Drawing.Size(71, 13);
+            this.lblCauta.Size = new System.Drawing.Size(75, 13);
             this.lblCauta.TabIndex = 2;
             this.lblCauta.Text = "Cauta editura:";
 

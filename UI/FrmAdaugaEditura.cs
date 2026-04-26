@@ -114,25 +114,25 @@ namespace BibliotecaScolara.UI
             this.lblNume.AutoSize = true;
             this.lblNume.Location = new System.Drawing.Point(12, 15);
             this.lblNume.Name = "lblNume";
-            this.lblNume.Size = new System.Drawing.Size(97, 13);
+            this.lblNume.Size = new System.Drawing.Size(38, 13);
             this.lblNume.TabIndex = 0;
-            this.lblNume.Text = "Nume Editura:";
+            this.lblNume.Text = "Nume:";
 
-            this.txtNume.Location = new System.Drawing.Point(120, 12);
+            this.txtNume.Location = new System.Drawing.Point(100, 12);
             this.txtNume.Name = "txtNume";
-            this.txtNume.Size = new System.Drawing.Size(230, 20);
+            this.txtNume.Size = new System.Drawing.Size(250, 20);
             this.txtNume.TabIndex = 1;
 
             this.lblAdresa.AutoSize = true;
             this.lblAdresa.Location = new System.Drawing.Point(12, 45);
             this.lblAdresa.Name = "lblAdresa";
-            this.lblAdresa.Size = new System.Drawing.Size(50, 13);
+            this.lblAdresa.Size = new System.Drawing.Size(45, 13);
             this.lblAdresa.TabIndex = 2;
             this.lblAdresa.Text = "Adresa:";
 
-            this.txtAdresa.Location = new System.Drawing.Point(120, 42);
+            this.txtAdresa.Location = new System.Drawing.Point(100, 42);
             this.txtAdresa.Name = "txtAdresa";
-            this.txtAdresa.Size = new System.Drawing.Size(230, 20);
+            this.txtAdresa.Size = new System.Drawing.Size(250, 20);
             this.txtAdresa.TabIndex = 3;
 
             this.lblTelefon.AutoSize = true;
@@ -142,9 +142,9 @@ namespace BibliotecaScolara.UI
             this.lblTelefon.TabIndex = 4;
             this.lblTelefon.Text = "Telefon:";
 
-            this.txtTelefon.Location = new System.Drawing.Point(120, 72);
+            this.txtTelefon.Location = new System.Drawing.Point(100, 72);
             this.txtTelefon.Name = "txtTelefon";
-            this.txtTelefon.Size = new System.Drawing.Size(230, 20);
+            this.txtTelefon.Size = new System.Drawing.Size(250, 20);
             this.txtTelefon.TabIndex = 5;
 
             this.lblEmail.AutoSize = true;
@@ -154,12 +154,12 @@ namespace BibliotecaScolara.UI
             this.lblEmail.TabIndex = 6;
             this.lblEmail.Text = "Email:";
 
-            this.txtEmail.Location = new System.Drawing.Point(120, 102);
+            this.txtEmail.Location = new System.Drawing.Point(100, 102);
             this.txtEmail.Name = "txtEmail";
-            this.txtEmail.Size = new System.Drawing.Size(230, 20);
+            this.txtEmail.Size = new System.Drawing.Size(250, 20);
             this.txtEmail.TabIndex = 7;
 
-            this.btnSalveaza.Location = new System.Drawing.Point(120, 140);
+            this.btnSalveaza.Location = new System.Drawing.Point(100, 140);
             this.btnSalveaza.Name = "btnSalveaza";
             this.btnSalveaza.Size = new System.Drawing.Size(75, 23);
             this.btnSalveaza.TabIndex = 8;
@@ -167,7 +167,7 @@ namespace BibliotecaScolara.UI
             this.btnSalveaza.UseVisualStyleBackColor = true;
             this.btnSalveaza.Click += new EventHandler(this.BtnSalveaza_Click);
 
-            this.btnAnuleaza.Location = new System.Drawing.Point(201, 140);
+            this.btnAnuleaza.Location = new System.Drawing.Point(181, 140);
             this.btnAnuleaza.Name = "btnAnuleaza";
             this.btnAnuleaza.Size = new System.Drawing.Size(75, 23);
             this.btnAnuleaza.TabIndex = 9;
