@@ -9,15 +9,22 @@ namespace BibliotecaScolara.UI
     public partial class FrmAdaugaEditura : Form
     {
         private Editura editura;
+        private bool isEditMode = false;
 
-        public FrmAdaugaEditura(Editura edituraEdit = null)
+        public FrmAdaugaEditura(Editura ed = null)
         {
             InitializeComponent();
-            editura = edituraEdit ?? new Editura();
-            if (edituraEdit != null)
+            if (ed != null)
             {
+                editura = ed;
+                isEditMode = true;
                 PopulateForm();
-                this.Text = "Editare Editura";
+                this.Text = "Modificare Editura";
+                btnSalveaza.Text = "Actualizeaza";
+            }
+            else
+            {
+                editura = new Editura();
             }
         }
 
@@ -34,26 +41,24 @@ namespace BibliotecaScolara.UI
             if (!Valideaza())
                 return;
 
-            editura.NumeEditura = txtNume.Text.Trim();
-            editura.Adresa = txtAdresa.Text.Trim();
-            editura.Telefon = txtTelefon.Text.Trim();
-            editura.Email = txtEmail.Text.Trim();
-
             try
             {
-                bool succes;
-                if (editura.IDEditura == 0)
-                    succes = EdituraManager.Insert(editura);
-                else
-                    succes = EdituraManager.Update(editura);
+                editura.NumeEditura = txtNume.Text;
+                editura.Adresa = txtAdresa.Text;
+                editura.Telefon = txtTelefon.Text;
+                editura.Email = txtEmail.Text;
 
-                if (succes)
+                bool result = isEditMode ? 
+                    EdituraManager.Update(editura) : 
+                    EdituraManager.Insert(editura);
+
+                if (result)
                 {
                     this.DialogResult = DialogResult.OK;
                     this.Close();
                 }
                 else
-                    Mesaje.Eroare("Operația nu a reușit!");
+                    Mesaje.Eroare("Nu s-a putut salva editura!");
             }
             catch (Exception ex)
             {
@@ -69,28 +74,15 @@ namespace BibliotecaScolara.UI
 
         private bool Valideaza()
         {
-            if (Validari.EsteGol(txtNume.Text))
+            if (string.IsNullOrWhiteSpace(txtNume.Text))
             {
                 Mesaje.Validare("Introduceți numele editurii!");
-                txtNume.Focus();
                 return false;
             }
 
-            if (!Validari.ValidareLungime(txtNume.Text, 2, 100))
+            if (txtNume.Text.Length < 3)
             {
-                Mesaje.Validare("Numele editurii trebuie să aibă între 2 și 100 caractere!");
-                return false;
-            }
-
-            if (!string.IsNullOrEmpty(txtEmail.Text) && !Validari.ValidareEmail(txtEmail.Text))
-            {
-                Mesaje.Validare("Email invalid!");
-                return false;
-            }
-
-            if (!string.IsNullOrEmpty(txtTelefon.Text) && !Validari.ValidareTelefon(txtTelefon.Text))
-            {
-                Mesaje.Validare("Număr de telefon invalid!");
+                Mesaje.Validare("Numele editurii trebuie să aibă cel puțin 3 caractere!");
                 return false;
             }
 
@@ -126,7 +118,7 @@ namespace BibliotecaScolara.UI
             this.lblAdresa.AutoSize = true;
             this.lblAdresa.Location = new System.Drawing.Point(12, 45);
             this.lblAdresa.Name = "lblAdresa";
-            this.lblAdresa.Size = new System.Drawing.Size(45, 13);
+            this.lblAdresa.Size = new System.Drawing.Size(48, 13);
             this.lblAdresa.TabIndex = 2;
             this.lblAdresa.Text = "Adresa:";
 
@@ -138,7 +130,7 @@ namespace BibliotecaScolara.UI
             this.lblTelefon.AutoSize = true;
             this.lblTelefon.Location = new System.Drawing.Point(12, 75);
             this.lblTelefon.Name = "lblTelefon";
-            this.lblTelefon.Size = new System.Drawing.Size(50, 13);
+            this.lblTelefon.Size = new System.Drawing.Size(53, 13);
             this.lblTelefon.TabIndex = 4;
             this.lblTelefon.Text = "Telefon:";
 
@@ -189,7 +181,7 @@ namespace BibliotecaScolara.UI
             this.Controls.Add(this.txtNume);
             this.Controls.Add(this.lblNume);
             this.Name = "FrmAdaugaEditura";
-            this.Text = "Adauga Editura";
+            this.Text = "Adaugare Editura";
             this.StartPosition = FormStartPosition.CenterScreen;
             this.ResumeLayout(false);
             this.PerformLayout();

@@ -41,7 +41,7 @@ namespace BibliotecaScolara.UI
             if (dataGridViewEdituri.Columns.Count > 0)
             {
                 dataGridViewEdituri.Columns["IDEditura"].Width = 50;
-                dataGridViewEdituri.Columns["NumeEditura"].Width = 150;
+                dataGridViewEdituri.Columns["NumeEditura"].Width = 200;
                 dataGridViewEdituri.Columns["Adresa"].Width = 200;
                 dataGridViewEdituri.Columns["Telefon"].Width = 100;
                 dataGridViewEdituri.Columns["Email"].Width = 150;
@@ -58,7 +58,7 @@ namespace BibliotecaScolara.UI
             }
         }
 
-        private void BtnEditeaza_Click(object sender, EventArgs e)
+        private void BtnModifica_Click(object sender, EventArgs e)
         {
             if (dataGridViewEdituri.SelectedRows.Count == 0)
             {
@@ -71,7 +71,7 @@ namespace BibliotecaScolara.UI
             if (frm.ShowDialog() == DialogResult.OK)
             {
                 LoadEdituri();
-                Mesaje.Succes("Editura a fost actualizată cu succes!");
+                Mesaje.Succes("Editura a fost modificată cu succes!");
             }
         }
 
@@ -83,9 +83,9 @@ namespace BibliotecaScolara.UI
                 return;
             }
 
-            if (Mesaje.ConfirmareSt() == DialogResult.Yes)
+            Editura editura = (Editura)dataGridViewEdituri.SelectedRows[0].DataBoundItem;
+            if (Mesaje.Confirmare($"Doriți să ștergeți editura '{editura.NumeEditura}'?") == DialogResult.Yes)
             {
-                Editura editura = (Editura)dataGridViewEdituri.SelectedRows[0].DataBoundItem;
                 try
                 {
                     if (EdituraManager.Delete(editura.IDEditura))
@@ -93,8 +93,6 @@ namespace BibliotecaScolara.UI
                         LoadEdituri();
                         Mesaje.Succes("Editura a fost ștearsă cu succes!");
                     }
-                    else
-                        Mesaje.Eroare("Nu s-a putut șterge editura!");
                 }
                 catch (Exception ex)
                 {
@@ -107,7 +105,7 @@ namespace BibliotecaScolara.UI
         {
             if (string.IsNullOrWhiteSpace(txtCauta.Text))
             {
-                RefreshGrid();
+                LoadEdituri();
             }
             else
             {
@@ -120,7 +118,7 @@ namespace BibliotecaScolara.UI
         {
             this.dataGridViewEdituri = new DataGridView();
             this.btnAdauga = new Button();
-            this.btnEditeaza = new Button();
+            this.btnModifica = new Button();
             this.btnSterge = new Button();
             this.txtCauta = new TextBox();
             this.lblCauta = new Label();
@@ -145,7 +143,7 @@ namespace BibliotecaScolara.UI
             this.lblCauta.AutoSize = true;
             this.lblCauta.Location = new System.Drawing.Point(12, 23);
             this.lblCauta.Name = "lblCauta";
-            this.lblCauta.Size = new System.Drawing.Size(75, 13);
+            this.lblCauta.Size = new System.Drawing.Size(83, 13);
             this.lblCauta.TabIndex = 2;
             this.lblCauta.Text = "Cauta editura:";
 
@@ -157,13 +155,13 @@ namespace BibliotecaScolara.UI
             this.btnAdauga.UseVisualStyleBackColor = true;
             this.btnAdauga.Click += new EventHandler(this.BtnAdauga_Click);
 
-            this.btnEditeaza.Location = new System.Drawing.Point(93, 410);
-            this.btnEditeaza.Name = "btnEditeaza";
-            this.btnEditeaza.Size = new System.Drawing.Size(75, 23);
-            this.btnEditeaza.TabIndex = 4;
-            this.btnEditeaza.Text = "Editeaza";
-            this.btnEditeaza.UseVisualStyleBackColor = true;
-            this.btnEditeaza.Click += new EventHandler(this.BtnEditeaza_Click);
+            this.btnModifica.Location = new System.Drawing.Point(93, 410);
+            this.btnModifica.Name = "btnModifica";
+            this.btnModifica.Size = new System.Drawing.Size(75, 23);
+            this.btnModifica.TabIndex = 4;
+            this.btnModifica.Text = "Modifica";
+            this.btnModifica.UseVisualStyleBackColor = true;
+            this.btnModifica.Click += new EventHandler(this.BtnModifica_Click);
 
             this.btnSterge.Location = new System.Drawing.Point(174, 410);
             this.btnSterge.Name = "btnSterge";
@@ -177,7 +175,7 @@ namespace BibliotecaScolara.UI
             this.AutoScaleMode = AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(784, 445);
             this.Controls.Add(this.btnSterge);
-            this.Controls.Add(this.btnEditeaza);
+            this.Controls.Add(this.btnModifica);
             this.Controls.Add(this.btnAdauga);
             this.Controls.Add(this.lblCauta);
             this.Controls.Add(this.txtCauta);
@@ -192,7 +190,7 @@ namespace BibliotecaScolara.UI
 
         private DataGridView dataGridViewEdituri;
         private Button btnAdauga;
-        private Button btnEditeaza;
+        private Button btnModifica;
         private Button btnSterge;
         private TextBox txtCauta;
         private Label lblCauta;
