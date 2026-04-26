@@ -81,17 +81,10 @@ namespace BibliotecaScolara.Managers
         }
 
         /// <summary>
-        /// Șterge o categorie (cu verificare)
+        /// Șterge o categorie
         /// </summary>
         public static bool Delete(int id)
         {
-            // Verifică dacă categoria are cărți
-            if (HasBooks(id))
-            {
-                Mesaje.ImpossibleDelete(Constante.Erori.CATEGORIE_ARE_CARTI);
-                return false;
-            }
-
             string query = "DELETE FROM Categorii WHERE IDCategorie = @ID";
             SqlParameter[] parameters = new[] { new SqlParameter("@ID", id) };
 
@@ -104,10 +97,7 @@ namespace BibliotecaScolara.Managers
         public static List<Categorie> Search(string searchTerm)
         {
             List<Categorie> categorii = new List<Categorie>();
-            string query = @"
-                SELECT * FROM Categorii 
-                WHERE NumeCategorie LIKE @Search
-                ORDER BY NumeCategorie";
+            string query = "SELECT * FROM Categorii WHERE NumeCategorie LIKE @Search ORDER BY NumeCategorie";
 
             SqlParameter[] parameters = new[] { new SqlParameter("@Search", "%" + searchTerm + "%") };
             
@@ -120,18 +110,6 @@ namespace BibliotecaScolara.Managers
         }
 
         /// <summary>
-        /// Verifică dacă categoria are cărți
-        /// </summary>
-        private static bool HasBooks(int categorieId)
-        {
-            string query = "SELECT COUNT(*) FROM Carti WHERE IDCategorie = @ID";
-            SqlParameter[] parameters = new[] { new SqlParameter("@ID", categorieId) };
-            
-            object result = DatabaseConnection.ExecuteScalar(query, parameters);
-            return result != null && int.TryParse(result.ToString(), out int count) && count > 0;
-        }
-
-        /// <summary>
         /// Mapează DataRow la obiect Categorie
         /// </summary>
         private static Categorie MapToCategorie(DataRow row)
@@ -140,8 +118,7 @@ namespace BibliotecaScolara.Managers
             {
                 IDCategorie = (int)row["IDCategorie"],
                 NumeCategorie = row["NumeCategorie"].ToString(),
-                Descriere = row["Descriere"].ToString(),
-                DataAdaugarii = (DateTime)row["DataAdaugarii"]
+                Descriere = row["Descriere"].ToString()
             };
         }
     }

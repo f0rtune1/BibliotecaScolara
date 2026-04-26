@@ -11,14 +11,13 @@ namespace BibliotecaScolara.Managers
     public class CarteManager
     {
         /// <summary>
-        /// Obține toate cărțile cu detalii
+        /// Obține toate cărțile cu detalii autor, editură și categorie
         /// </summary>
         public static List<Carte> GetAll()
         {
             List<Carte> carti = new List<Carte>();
             string query = @"
-                SELECT c.*, a.Nume + ' ' + a.Prenume AS NumeAutor,
-                       ed.NumeEditura, cat.NumeCategorie
+                SELECT c.*, a.Prenume AS NumeAutor, ed.NumeEditura, cat.NumeCategorie
                 FROM Carti c
                 JOIN Autori a ON c.IDAutor = a.IDAutor
                 JOIN Edituri ed ON c.IDEditura = ed.IDEditura
@@ -39,8 +38,7 @@ namespace BibliotecaScolara.Managers
         public static Carte GetByID(int id)
         {
             string query = @"
-                SELECT c.*, a.Nume + ' ' + a.Prenume AS NumeAutor,
-                       ed.NumeEditura, cat.NumeCategorie
+                SELECT c.*, a.Prenume AS NumeAutor, ed.NumeEditura, cat.NumeCategorie
                 FROM Carti c
                 JOIN Autori a ON c.IDAutor = a.IDAutor
                 JOIN Edituri ed ON c.IDEditura = ed.IDEditura
@@ -73,7 +71,7 @@ namespace BibliotecaScolara.Managers
                 new SqlParameter("@IDEditura", carte.IDEditura),
                 new SqlParameter("@IDCategorie", carte.IDCategorie),
                 new SqlParameter("@An", carte.AnPublicarii ?? (object)DBNull.Value),
-                new SqlParameter("@ISBN", carte.ISBN ?? (object)DBNull.Value),
+                new SqlParameter("@ISBN", carte.ISBN ?? ""),
                 new SqlParameter("@Pagini", carte.NrPagini ?? (object)DBNull.Value)
             };
 
@@ -87,8 +85,8 @@ namespace BibliotecaScolara.Managers
         {
             string query = @"
                 UPDATE Carti 
-                SET Titlu = @Titlu, IDAutor = @IDAutor, IDEditura = @IDEditura, 
-                    IDCategorie = @IDCategorie, AnPublicarii = @An, ISBN = @ISBN, NrPagini = @Pagini
+                SET Titlu = @Titlu, IDAutor = @IDAutor, IDEditura = @IDEditura, IDCategorie = @IDCategorie,
+                    AnPublicarii = @An, ISBN = @ISBN, NrPagini = @Pagini
                 WHERE IDCarte = @ID";
 
             SqlParameter[] parameters = new[]
@@ -99,7 +97,7 @@ namespace BibliotecaScolara.Managers
                 new SqlParameter("@IDEditura", carte.IDEditura),
                 new SqlParameter("@IDCategorie", carte.IDCategorie),
                 new SqlParameter("@An", carte.AnPublicarii ?? (object)DBNull.Value),
-                new SqlParameter("@ISBN", carte.ISBN ?? (object)DBNull.Value),
+                new SqlParameter("@ISBN", carte.ISBN ?? ""),
                 new SqlParameter("@Pagini", carte.NrPagini ?? (object)DBNull.Value)
             };
 
@@ -107,7 +105,7 @@ namespace BibliotecaScolara.Managers
         }
 
         /// <summary>
-        /// Șterge o carte (cu verificare)
+        /// Șterge o carte
         /// </summary>
         public static bool Delete(int id)
         {
@@ -118,19 +116,18 @@ namespace BibliotecaScolara.Managers
         }
 
         /// <summary>
-        /// Caută cărți după titlu, autor, ISBN
+        /// Caută cărți după titlu, autor, ISBN sau categorie
         /// </summary>
         public static List<Carte> Search(string searchTerm)
         {
             List<Carte> carti = new List<Carte>();
             string query = @"
-                SELECT c.*, a.Nume + ' ' + a.Prenume AS NumeAutor,
-                       ed.NumeEditura, cat.NumeCategorie
+                SELECT c.*, a.Prenume AS NumeAutor, ed.NumeEditura, cat.NumeCategorie
                 FROM Carti c
                 JOIN Autori a ON c.IDAutor = a.IDAutor
                 JOIN Edituri ed ON c.IDEditura = ed.IDEditura
                 JOIN Categorii cat ON c.IDCategorie = cat.IDCategorie
-                WHERE c.Titlu LIKE @Search OR a.Nume LIKE @Search OR a.Prenume LIKE @Search OR c.ISBN LIKE @Search
+                WHERE c.Titlu LIKE @Search OR a.Prenume LIKE @Search OR c.ISBN LIKE @Search
                 ORDER BY c.Titlu";
 
             SqlParameter[] parameters = new[] { new SqlParameter("@Search", "%" + searchTerm + "%") };
@@ -144,22 +141,21 @@ namespace BibliotecaScolara.Managers
         }
 
         /// <summary>
-        /// Obține cărți din categorie
+        /// Obține cărți după categorie
         /// </summary>
         public static List<Carte> GetByCategorie(int categorieId)
         {
             List<Carte> carti = new List<Carte>();
             string query = @"
-                SELECT c.*, a.Nume + ' ' + a.Prenume AS NumeAutor,
-                       ed.NumeEditura, cat.NumeCategorie
+                SELECT c.*, a.Prenume AS NumeAutor, ed.NumeEditura, cat.NumeCategorie
                 FROM Carti c
                 JOIN Autori a ON c.IDAutor = a.IDAutor
                 JOIN Edituri ed ON c.IDEditura = ed.IDEditura
                 JOIN Categorii cat ON c.IDCategorie = cat.IDCategorie
-                WHERE c.IDCategorie = @IDCategorie
+                WHERE c.IDCategorie = @ID
                 ORDER BY c.Titlu";
 
-            SqlParameter[] parameters = new[] { new SqlParameter("@IDCategorie", categorieId) };
+            SqlParameter[] parameters = new[] { new SqlParameter("@ID", categorieId) };
             
             DataTable dt = DatabaseConnection.ExecuteDataTable(query, parameters);
             foreach (DataRow row in dt.Rows)

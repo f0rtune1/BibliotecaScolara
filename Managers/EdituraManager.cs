@@ -108,10 +108,7 @@ namespace BibliotecaScolara.Managers
         public static List<Editura> Search(string searchTerm)
         {
             List<Editura> edituri = new List<Editura>();
-            string query = @"
-                SELECT * FROM Edituri 
-                WHERE NumeEditura LIKE @Search
-                ORDER BY NumeEditura";
+            string query = "SELECT * FROM Edituri WHERE NumeEditura LIKE @Search ORDER BY NumeEditura";
 
             SqlParameter[] parameters = new[] { new SqlParameter("@Search", "%" + searchTerm + "%") };
             
@@ -124,12 +121,12 @@ namespace BibliotecaScolara.Managers
         }
 
         /// <summary>
-        /// Verifică dacă editura are cărți
+        /// Verifică dacă editura are cărți asociate
         /// </summary>
-        private static bool HasBooks(int edituraId)
+        private static bool HasBooks(int editulaId)
         {
             string query = "SELECT COUNT(*) FROM Carti WHERE IDEditura = @ID";
-            SqlParameter[] parameters = new[] { new SqlParameter("@ID", edituraId) };
+            SqlParameter[] parameters = new[] { new SqlParameter("@ID", editulaId) };
             
             object result = DatabaseConnection.ExecuteScalar(query, parameters);
             return result != null && int.TryParse(result.ToString(), out int count) && count > 0;

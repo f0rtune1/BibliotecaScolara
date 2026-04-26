@@ -49,13 +49,13 @@ namespace BibliotecaScolara.Managers
         {
             string query = @"
                 INSERT INTO Autori (Nume, Prenume, DataNasterii, Nationalitate, BiografieBrieșă)
-                VALUES (@Nume, @Prenume, @DataNasterii, @Nationalitate, @Biografie)";
+                VALUES (@Nume, @Prenume, @Data, @Nationalitate, @Biografie)";
 
             SqlParameter[] parameters = new[]
             {
                 new SqlParameter("@Nume", autor.Nume ?? ""),
                 new SqlParameter("@Prenume", autor.Prenume ?? ""),
-                new SqlParameter("@DataNasterii", autor.DataNasterii ?? (object)DBNull.Value),
+                new SqlParameter("@Data", autor.DataNasterii ?? (object)DBNull.Value),
                 new SqlParameter("@Nationalitate", autor.Nationalitate ?? ""),
                 new SqlParameter("@Biografie", autor.BiografieBrieșă ?? "")
             };
@@ -70,7 +70,7 @@ namespace BibliotecaScolara.Managers
         {
             string query = @"
                 UPDATE Autori 
-                SET Nume = @Nume, Prenume = @Prenume, DataNasterii = @DataNasterii, 
+                SET Nume = @Nume, Prenume = @Prenume, DataNasterii = @Data, 
                     Nationalitate = @Nationalitate, BiografieBrieșă = @Biografie
                 WHERE IDAutor = @ID";
 
@@ -79,7 +79,7 @@ namespace BibliotecaScolara.Managers
                 new SqlParameter("@ID", autor.IDAutor),
                 new SqlParameter("@Nume", autor.Nume ?? ""),
                 new SqlParameter("@Prenume", autor.Prenume ?? ""),
-                new SqlParameter("@DataNasterii", autor.DataNasterii ?? (object)DBNull.Value),
+                new SqlParameter("@Data", autor.DataNasterii ?? (object)DBNull.Value),
                 new SqlParameter("@Nationalitate", autor.Nationalitate ?? ""),
                 new SqlParameter("@Biografie", autor.BiografieBrieșă ?? "")
             };
@@ -111,10 +111,7 @@ namespace BibliotecaScolara.Managers
         public static List<Autor> Search(string searchTerm)
         {
             List<Autor> autori = new List<Autor>();
-            string query = @"
-                SELECT * FROM Autori 
-                WHERE Nume LIKE @Search OR Prenume LIKE @Search
-                ORDER BY Nume, Prenume";
+            string query = "SELECT * FROM Autori WHERE Nume LIKE @Search OR Prenume LIKE @Search ORDER BY Nume, Prenume";
 
             SqlParameter[] parameters = new[] { new SqlParameter("@Search", "%" + searchTerm + "%") };
             
@@ -127,7 +124,7 @@ namespace BibliotecaScolara.Managers
         }
 
         /// <summary>
-        /// Verifică dacă autorul are cărți
+        /// Verifică dacă autorul are cărți asociate
         /// </summary>
         private static bool HasBooks(int autorId)
         {
