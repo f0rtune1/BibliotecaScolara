@@ -11,7 +11,7 @@ namespace BibliotecaScolara.Managers
     public class ExemplarManager
     {
         /// <summary>
-        /// Obține toate exemplarele cu detalii carte
+        /// Obține toate exemplarele
         /// </summary>
         public static List<Exemplar> GetAll()
         {
@@ -31,28 +31,7 @@ namespace BibliotecaScolara.Managers
         }
 
         /// <summary>
-        /// Obține un exemplar după ID
-        /// </summary>
-        public static Exemplar GetByID(int id)
-        {
-            string query = @"
-                SELECT e.*, c.Titlu AS TitluCarte
-                FROM Exemplare e
-                JOIN Carti c ON e.IDCarte = c.IDCarte
-                WHERE e.IDExemplar = @ID";
-            
-            SqlParameter[] parameters = new[] { new SqlParameter("@ID", id) };
-            DataTable dt = DatabaseConnection.ExecuteDataTable(query, parameters);
-            
-            if (dt.Rows.Count > 0)
-            {
-                return MapToExemplar(dt.Rows[0]);
-            }
-            return null;
-        }
-
-        /// <summary>
-        /// Obține exemplare după carte
+        /// Obține exemplarele unei cărți
         /// </summary>
         public static List<Exemplar> GetByCarte(int carteId)
         {
@@ -63,8 +42,37 @@ namespace BibliotecaScolara.Managers
                 JOIN Carti c ON e.IDCarte = c.IDCarte
                 WHERE e.IDCarte = @IDCarte
                 ORDER BY e.CoduInventar";
-
+            
             SqlParameter[] parameters = new[] { new SqlParameter("@IDCarte", carteId) };
+            DataTable dt = DatabaseConnection.ExecuteDataTable(query, parameters);
+            foreach (DataRow row in dt.Rows)
+            {
+                exemplare.Add(MapToExemplar(row));
+            }
+            return exemplare;
+        }
+
+        /// <summary>
+        /// Obține exemplarele disponibile ale unei cărți
+        /// </summary>
+        public static List<Exemplar> GetAvailableForCarte(int carteId)
+        {
+            List<Exemplar> exemplare = new List<Exemplar>();
+            string query = @"
+                SELECT e.*, c.Titlu AS TitluCarte
+                FROM Exemplare e
+                JOIN Carti c ON e.IDCarte = c.IDCarte
+                WHERE e.IDCarte = @IDCarte 
+                AND e.StareExemplar = @Stare
+                AND e.IDExemplar NOT IN (SELECT IDExemplar FROM Imprumturi WHERE Status = @StatusActiv)
+                ORDER BY e.CoduInventar";
+            
+            SqlParameter[] parameters = new[]
+            {
+                new SqlParameter("@IDCarte", carteId),
+                new SqlParameter("@Stare", Constante.StareExemplar.BUNA),
+                new SqlParameter("@StatusActiv", Constante.StareImprumut.ACTIV)
+            };
             
             DataTable dt = DatabaseConnection.ExecuteDataTable(query, parameters);
             foreach (DataRow row in dt.Rows)
@@ -81,14 +89,14 @@ namespace BibliotecaScolara.Managers
         {
             string query = @"
                 INSERT INTO Exemplare (IDCarte, CoduInventar, StareExemplar, DataAchizitiei, Pret)
-                VALUES (@IDCarte, @Cod, @Stare, @DataAchizitie, @Pret)";
+                VALUES (@IDCarte, @Cod, @Stare, @Data, @Pret)";
 
             SqlParameter[] parameters = new[]
             {
                 new SqlParameter("@IDCarte", exemplar.IDCarte),
                 new SqlParameter("@Cod", exemplar.CoduInventar ?? ""),
                 new SqlParameter("@Stare", exemplar.StareExemplar ?? Constante.StareExemplar.BUNA),
-                new SqlParameter("@DataAchizitie", exemplar.DataAchizitiei),
+                new SqlParameter("@Data", exemplar.DataAchizitiei),
                 new SqlParameter("@Pret", exemplar.Pret ?? (object)DBNull.Value)
             };
 
@@ -102,8 +110,7 @@ namespace BibliotecaScolara.Managers
         {
             string query = @"
                 UPDATE Exemplare 
-                SET IDCarte = @IDCarte, CoduInventar = @Cod, StareExemplar = @Stare, 
-                    DataAchizitiei = @DataAchizitie, Pret = @Pret
+                SET IDCarte = @IDCarte, CoduInventar = @Cod, StareExemplar = @Stare, DataAchizitiei = @Data, Pret = @Pret
                 WHERE IDExemplar = @ID";
 
             SqlParameter[] parameters = new[]
@@ -112,7 +119,7 @@ namespace BibliotecaScolara.Managers
                 new SqlParameter("@IDCarte", exemplar.IDCarte),
                 new SqlParameter("@Cod", exemplar.CoduInventar ?? ""),
                 new SqlParameter("@Stare", exemplar.StareExemplar ?? Constante.StareExemplar.BUNA),
-                new SqlParameter("@DataAchizitie", exemplar.DataAchizitiei),
+                new SqlParameter("@Data", exemplar.DataAchizitiei),
                 new SqlParameter("@Pret", exemplar.Pret ?? (object)DBNull.Value)
             };
 
@@ -128,62 +135,6 @@ namespace BibliotecaScolara.Managers
             SqlParameter[] parameters = new[] { new SqlParameter("@ID", id) };
 
             return DatabaseConnection.ExecuteNonQuery(query, parameters);
-        }
-
-        /// <summary>
-        /// Caută exemplare după cod inventar sau titlu carte
-        /// </summary>
-        public static List<Exemplar> Search(string searchTerm)
-        {
-            List<Exemplar> exemplare = new List<Exemplar>();
-            string query = @"
-                SELECT e.*, c.Titlu AS TitluCarte
-                FROM Exemplare e
-                JOIN Carti c ON e.IDCarte = c.IDCarte
-                WHERE e.CoduInventar LIKE @Search OR c.Titlu LIKE @Search
-                ORDER BY e.CoduInventar";
-
-            SqlParameter[] parameters = new[] { new SqlParameter("@Search", "%" + searchTerm + "%") };
-            
-            DataTable dt = DatabaseConnection.ExecuteDataTable(query, parameters);
-            foreach (DataRow row in dt.Rows)
-            {
-                exemplare.Add(MapToExemplar(row));
-            }
-            return exemplare;
-        }
-
-        /// <summary>
-        /// Obține exemplare disponibile pentru o carte
-        /// </summary>
-        public static List<Exemplar> GetAvailableForCarte(int carteId)
-        {
-            List<Exemplar> exemplare = new List<Exemplar>();
-            string query = @"
-                SELECT e.*, c.Titlu AS TitluCarte
-                FROM Exemplare e
-                JOIN Carti c ON e.IDCarte = c.IDCarte
-                WHERE e.IDCarte = @IDCarte 
-                  AND e.StareExemplar = @Stare
-                  AND e.IDExemplar NOT IN (
-                      SELECT IDExemplar FROM Imprumturi 
-                      WHERE Status = @StatusActiv AND DataRestituire IS NULL
-                  )
-                ORDER BY e.CoduInventar";
-
-            SqlParameter[] parameters = new[]
-            {
-                new SqlParameter("@IDCarte", carteId),
-                new SqlParameter("@Stare", Constante.StareExemplar.BUNA),
-                new SqlParameter("@StatusActiv", Constante.StareImprumut.ACTIV)
-            };
-            
-            DataTable dt = DatabaseConnection.ExecuteDataTable(query, parameters);
-            foreach (DataRow row in dt.Rows)
-            {
-                exemplare.Add(MapToExemplar(row));
-            }
-            return exemplare;
         }
 
         /// <summary>

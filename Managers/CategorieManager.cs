@@ -4,7 +4,6 @@ using System.Data;
 using System.Data.SqlClient;
 using BibliotecaScolara.Models;
 using BibliotecaScolara.Database;
-using BibliotecaScolara.Utilities;
 
 namespace BibliotecaScolara.Managers
 {
