@@ -11,17 +11,17 @@ namespace BibliotecaScolara.Managers
     public class CarteManager
     {
         /// <summary>
-        /// Obține toate cărțile cu detalii autor și editură
+        /// Obține toate cărțile cu detalii
         /// </summary>
         public static List<Carte> GetAll()
         {
             List<Carte> carti = new List<Carte>();
             string query = @"
-                SELECT c.*, a.Nume AS NumeAutor, a.Prenume AS PrenumeAutor, 
-                       e.NumeEditura, cat.NumeCategorie
+                SELECT c.*, a.Nume + ' ' + a.Prenume AS NumeAutor,
+                       ed.NumeEditura, cat.NumeCategorie
                 FROM Carti c
                 JOIN Autori a ON c.IDAutor = a.IDAutor
-                JOIN Edituri e ON c.IDEditura = e.IDEditura
+                JOIN Edituri ed ON c.IDEditura = ed.IDEditura
                 JOIN Categorii cat ON c.IDCategorie = cat.IDCategorie
                 ORDER BY c.Titlu";
             
@@ -39,11 +39,11 @@ namespace BibliotecaScolara.Managers
         public static Carte GetByID(int id)
         {
             string query = @"
-                SELECT c.*, a.Nume AS NumeAutor, a.Prenume AS PrenumeAutor, 
-                       e.NumeEditura, cat.NumeCategorie
+                SELECT c.*, a.Nume + ' ' + a.Prenume AS NumeAutor,
+                       ed.NumeEditura, cat.NumeCategorie
                 FROM Carti c
                 JOIN Autori a ON c.IDAutor = a.IDAutor
-                JOIN Edituri e ON c.IDEditura = e.IDEditura
+                JOIN Edituri ed ON c.IDEditura = ed.IDEditura
                 JOIN Categorii cat ON c.IDCategorie = cat.IDCategorie
                 WHERE c.IDCarte = @ID";
             
@@ -62,16 +62,9 @@ namespace BibliotecaScolara.Managers
         /// </summary>
         public static bool Insert(Carte carte)
         {
-            // Validare ISBN unic
-            if (ISBNExists(carte.ISBN))
-            {
-                Mesaje.Eroare("ISBN-ul există deja în sistem!", "ISBN Duplicat");
-                return false;
-            }
-
             string query = @"
                 INSERT INTO Carti (Titlu, IDAutor, IDEditura, IDCategorie, AnPublicarii, ISBN, NrPagini)
-                VALUES (@Titlu, @IDAutor, @IDEditura, @IDCategorie, @AnPublicarii, @ISBN, @NrPagini)";
+                VALUES (@Titlu, @IDAutor, @IDEditura, @IDCategorie, @An, @ISBN, @Pagini)";
 
             SqlParameter[] parameters = new[]
             {
@@ -79,9 +72,9 @@ namespace BibliotecaScolara.Managers
                 new SqlParameter("@IDAutor", carte.IDAutor),
                 new SqlParameter("@IDEditura", carte.IDEditura),
                 new SqlParameter("@IDCategorie", carte.IDCategorie),
-                new SqlParameter("@AnPublicarii", carte.AnPublicarii ?? (object)DBNull.Value),
-                new SqlParameter("@ISBN", carte.ISBN ?? ""),
-                new SqlParameter("@NrPagini", carte.NrPagini ?? (object)DBNull.Value)
+                new SqlParameter("@An", carte.AnPublicarii ?? (object)DBNull.Value),
+                new SqlParameter("@ISBN", carte.ISBN ?? (object)DBNull.Value),
+                new SqlParameter("@Pagini", carte.NrPagini ?? (object)DBNull.Value)
             };
 
             return DatabaseConnection.ExecuteNonQuery(query, parameters);
@@ -95,8 +88,7 @@ namespace BibliotecaScolara.Managers
             string query = @"
                 UPDATE Carti 
                 SET Titlu = @Titlu, IDAutor = @IDAutor, IDEditura = @IDEditura, 
-                    IDCategorie = @IDCategorie, AnPublicarii = @AnPublicarii, 
-                    ISBN = @ISBN, NrPagini = @NrPagini
+                    IDCategorie = @IDCategorie, AnPublicarii = @An, ISBN = @ISBN, NrPagini = @Pagini
                 WHERE IDCarte = @ID";
 
             SqlParameter[] parameters = new[]
@@ -106,16 +98,16 @@ namespace BibliotecaScolara.Managers
                 new SqlParameter("@IDAutor", carte.IDAutor),
                 new SqlParameter("@IDEditura", carte.IDEditura),
                 new SqlParameter("@IDCategorie", carte.IDCategorie),
-                new SqlParameter("@AnPublicarii", carte.AnPublicarii ?? (object)DBNull.Value),
-                new SqlParameter("@ISBN", carte.ISBN ?? ""),
-                new SqlParameter("@NrPagini", carte.NrPagini ?? (object)DBNull.Value)
+                new SqlParameter("@An", carte.AnPublicarii ?? (object)DBNull.Value),
+                new SqlParameter("@ISBN", carte.ISBN ?? (object)DBNull.Value),
+                new SqlParameter("@Pagini", carte.NrPagini ?? (object)DBNull.Value)
             };
 
             return DatabaseConnection.ExecuteNonQuery(query, parameters);
         }
 
         /// <summary>
-        /// Șterge o carte
+        /// Șterge o carte (cu verificare)
         /// </summary>
         public static bool Delete(int id)
         {
@@ -126,20 +118,19 @@ namespace BibliotecaScolara.Managers
         }
 
         /// <summary>
-        /// Caută cărți după titlu, autor sau ISBN
+        /// Caută cărți după titlu, autor, ISBN
         /// </summary>
         public static List<Carte> Search(string searchTerm)
         {
             List<Carte> carti = new List<Carte>();
             string query = @"
-                SELECT c.*, a.Nume AS NumeAutor, a.Prenume AS PrenumeAutor, 
-                       e.NumeEditura, cat.NumeCategorie
+                SELECT c.*, a.Nume + ' ' + a.Prenume AS NumeAutor,
+                       ed.NumeEditura, cat.NumeCategorie
                 FROM Carti c
                 JOIN Autori a ON c.IDAutor = a.IDAutor
-                JOIN Edituri e ON c.IDEditura = e.IDEditura
+                JOIN Edituri ed ON c.IDEditura = ed.IDEditura
                 JOIN Categorii cat ON c.IDCategorie = cat.IDCategorie
-                WHERE c.Titlu LIKE @Search OR a.Nume LIKE @Search 
-                   OR a.Prenume LIKE @Search OR c.ISBN LIKE @Search
+                WHERE c.Titlu LIKE @Search OR a.Nume LIKE @Search OR a.Prenume LIKE @Search OR c.ISBN LIKE @Search
                 ORDER BY c.Titlu";
 
             SqlParameter[] parameters = new[] { new SqlParameter("@Search", "%" + searchTerm + "%") };
@@ -153,17 +144,17 @@ namespace BibliotecaScolara.Managers
         }
 
         /// <summary>
-        /// Obține cărți după categorie
+        /// Obține cărți din categorie
         /// </summary>
         public static List<Carte> GetByCategorie(int categorieId)
         {
             List<Carte> carti = new List<Carte>();
             string query = @"
-                SELECT c.*, a.Nume AS NumeAutor, a.Prenume AS PrenumeAutor, 
-                       e.NumeEditura, cat.NumeCategorie
+                SELECT c.*, a.Nume + ' ' + a.Prenume AS NumeAutor,
+                       ed.NumeEditura, cat.NumeCategorie
                 FROM Carti c
                 JOIN Autori a ON c.IDAutor = a.IDAutor
-                JOIN Edituri e ON c.IDEditura = e.IDEditura
+                JOIN Edituri ed ON c.IDEditura = ed.IDEditura
                 JOIN Categorii cat ON c.IDCategorie = cat.IDCategorie
                 WHERE c.IDCategorie = @IDCategorie
                 ORDER BY c.Titlu";
@@ -176,18 +167,6 @@ namespace BibliotecaScolara.Managers
                 carti.Add(MapToCarte(row));
             }
             return carti;
-        }
-
-        /// <summary>
-        /// Verifică dacă ISBN-ul există
-        /// </summary>
-        private static bool ISBNExists(string isbn)
-        {
-            string query = "SELECT COUNT(*) FROM Carti WHERE ISBN = @ISBN";
-            SqlParameter[] parameters = new[] { new SqlParameter("@ISBN", isbn) };
-            
-            object result = DatabaseConnection.ExecuteScalar(query, parameters);
-            return result != null && int.TryParse(result.ToString(), out int count) && count > 0;
         }
 
         /// <summary>
@@ -206,7 +185,7 @@ namespace BibliotecaScolara.Managers
                 ISBN = row["ISBN"].ToString(),
                 NrPagini = row["NrPagini"] == DBNull.Value ? null : (int?)row["NrPagini"],
                 DataAdaugarii = (DateTime)row["DataAdaugarii"],
-                NumeAutor = row["NumeAutor"].ToString() + " " + row["PrenumeAutor"].ToString(),
+                NumeAutor = row["NumeAutor"].ToString(),
                 NumeEditura = row["NumeEditura"].ToString(),
                 NumeCategorie = row["NumeCategorie"].ToString()
             };

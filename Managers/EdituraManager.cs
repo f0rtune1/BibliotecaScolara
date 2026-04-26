@@ -89,8 +89,8 @@ namespace BibliotecaScolara.Managers
         /// </summary>
         public static bool Delete(int id)
         {
-            // Verifică dacă editura are cărți asociate
-            if (HasAssociatedBooks(id))
+            // Verifică dacă editura are cărți
+            if (HasBooks(id))
             {
                 Mesaje.ImpossibleDelete(Constante.Erori.EDITURA_ARE_CARTI);
                 return false;
@@ -124,9 +124,9 @@ namespace BibliotecaScolara.Managers
         }
 
         /// <summary>
-        /// Verifică dacă editura are cărți asociate
+        /// Verifică dacă editura are cărți
         /// </summary>
-        private static bool HasAssociatedBooks(int edituraId)
+        private static bool HasBooks(int edituraId)
         {
             string query = "SELECT COUNT(*) FROM Carti WHERE IDEditura = @ID";
             SqlParameter[] parameters = new[] { new SqlParameter("@ID", edituraId) };
