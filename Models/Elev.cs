@@ -16,7 +16,7 @@ namespace BibliotecaScolara.Models
 
         public override string ToString()
         {
-            return $"{Nume} {Prenume} - Clasa {Clasa}";
+            return $"{Nume} {Prenume} ({Clasa})";
         }
     }
 }

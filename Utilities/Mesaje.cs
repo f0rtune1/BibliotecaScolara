@@ -1,60 +1,100 @@
+using System;
 using System.Windows.Forms;
 
 namespace BibliotecaScolara.Utilities
 {
     public static class Mesaje
     {
-        public static void Succes(string mesaj, string titlu = "Succes")
+        /// <summary>
+        /// Afișează mesaj de informare
+        /// </summary>
+        public static void Informare(string mesaj, string titlu = "Informare")
         {
             MessageBox.Show(mesaj, titlu, MessageBoxButtons.OK, MessageBoxIcon.Information);
         }
 
+        /// <summary>
+        /// Afișează mesaj de eroare
+        /// </summary>
         public static void Eroare(string mesaj, string titlu = "Eroare")
         {
             MessageBox.Show(mesaj, titlu, MessageBoxButtons.OK, MessageBoxIcon.Error);
         }
 
+        /// <summary>
+        /// Afișează mesaj de avertisment
+        /// </summary>
         public static void Avertisment(string mesaj, string titlu = "Avertisment")
         {
             MessageBox.Show(mesaj, titlu, MessageBoxButtons.OK, MessageBoxIcon.Warning);
         }
 
-        public static DialogResult Intrebare(string mesaj, string titlu = "Confirmare")
+        /// <summary>
+        /// Afișează mesaj de confirmare
+        /// </summary>
+        public static DialogResult Confirmare(string mesaj, string titlu = "Confirmare")
         {
             return MessageBox.Show(mesaj, titlu, MessageBoxButtons.YesNo, MessageBoxIcon.Question);
         }
 
-        public static DialogResult IntrebareStergere(string numElement)
+        /// <summary>
+        /// Afișează mesaj de ștergere cu confirmare
+        /// </summary>
+        public static DialogResult ConfirmareSt()
         {
-            string mesaj = $"Sigur doriți să ștergeți {numElement}?\n\nAceastă acțiune nu poate fi anulată!";
-            return Intrebare(mesaj, "Ștergere Confirmare");
+            return MessageBox.Show(
+                "Sunteți sigur că doriți să ștergeți această înregistrare?",
+                "Confirmare ștergere",
+                MessageBoxButtons.YesNo,
+                MessageBoxIcon.Question
+            );
         }
 
-        public static DialogResult IntrebareStergereRelationat(string mesaj)
-        {
-            string mesajComplet = $"{mesaj}\n\nAceastă acțiune va șterge și datele asociate și nu poate fi anulată!";
-            return Intrebare(mesajComplet, "Ștergere - Avertisment");
-        }
-
-        // Mesaje predefinite pentru validări
-        public static void CampulEsteObligatoriu(string numCamp)
-        {
-            Eroare($"Câmpul '{numCamp}' este obligatoriu!", "Validare");
-        }
-
-        public static void FormatInvalid(string numCamp)
-        {
-            Eroare($"Format invalid pentru câmpul '{numCamp}'!", "Validare");
-        }
-
-        public static void ValoareDuplicata(string numCamp)
-        {
-            Eroare($"Valoarea în câmpul '{numCamp}' există deja în sistem!", "Validare");
-        }
-
+        /// <summary>
+        /// Afișează mesaj de ștergere imposibil
+        /// </summary>
         public static void ImpossibleDelete(string motiv)
         {
-            Eroare($"Nu se poate șterge înregistrarea!\n\n{motiv}", "Ștergere Imposibilă");
+            MessageBox.Show(
+                motiv,
+                "Ștergere imposibilă",
+                MessageBoxButtons.OK,
+                MessageBoxIcon.Warning
+            );
+        }
+
+        /// <summary>
+        /// Afișează mesaj de succes
+        /// </summary>
+        public static void Succes(string mesaj, string titlu = "Succes")
+        {
+            MessageBox.Show(mesaj, titlu, MessageBoxButtons.OK, MessageBoxIcon.Information);
+        }
+
+        /// <summary>
+        /// Afișează mesaj de validare
+        /// </summary>
+        public static void Validare(string mesaj)
+        {
+            MessageBox.Show(
+                mesaj,
+                "Validare date",
+                MessageBoxButtons.OK,
+                MessageBoxIcon.Warning
+            );
+        }
+
+        /// <summary>
+        /// Afișează mesaj pentru operație nereușită
+        /// </summary>
+        public static void OperatieFailed(string operatie = "Operația")
+        {
+            MessageBox.Show(
+                $"{operatie} a eșuat! Vă rugăm verificați datele și încercați din nou.",
+                "Eroare",
+                MessageBoxButtons.OK,
+                MessageBoxIcon.Error
+            );
         }
     }
 }

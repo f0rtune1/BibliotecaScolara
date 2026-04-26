@@ -11,10 +11,7 @@ namespace BibliotecaScolara.Models
         public DateTime DataAchizitiei { get; set; }
         public decimal? Pret { get; set; }
         public DateTime DataAdaugarii { get; set; }
-
-        // Proprietăți pentru afișare în UI
         public string TitluCarte { get; set; }
-        public bool Disponibil { get; set; }
 
         public override string ToString()
         {

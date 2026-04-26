@@ -13,8 +13,6 @@ namespace BibliotecaScolara.Models
         public string ISBN { get; set; }
         public int? NrPagini { get; set; }
         public DateTime DataAdaugarii { get; set; }
-
-        // Proprietăți pentru afișare în UI
         public string NumeAutor { get; set; }
         public string NumeEditura { get; set; }
         public string NumeCategorie { get; set; }

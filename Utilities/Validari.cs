@@ -6,20 +6,12 @@ namespace BibliotecaScolara.Utilities
     public static class Validari
     {
         /// <summary>
-        /// Validează dacă un string nu este gol sau null
-        /// </summary>
-        public static bool ValidareRequired(string valoare)
-        {
-            return !string.IsNullOrWhiteSpace(valoare);
-        }
-
-        /// <summary>
-        /// Validează formatul unui email
+        /// Validează email
         /// </summary>
         public static bool ValidareEmail(string email)
         {
             if (string.IsNullOrWhiteSpace(email))
-                return true; // Email opțional
+                return true; // Email optional
 
             try
             {
@@ -33,92 +25,101 @@ namespace BibliotecaScolara.Utilities
         }
 
         /// <summary>
-        /// Validează formatul unui telefon (doar cifre, -, +)
+        /// Validează telefon (format românesc)
         /// </summary>
         public static bool ValidareTelefon(string telefon)
         {
             if (string.IsNullOrWhiteSpace(telefon))
-                return true; // Telefon opțional
+                return true; // Telefon optional
 
-            return Regex.IsMatch(telefon, @"^[\d\-\+\s()]+$");
+            // Acceptă: 0700000000, +40700000000, 0xx xxxx xxxx
+            string pattern = @"^(\+40|0)[0-9]{9}$";
+            return Regex.IsMatch(telefon.Replace(" ", ""), pattern);
         }
 
         /// <summary>
-        /// Validează formatul ISBN (10 sau 13 caractere)
+        /// Validează ISBN (ISBN-10 sau ISBN-13)
         /// </summary>
         public static bool ValidareISBN(string isbn)
         {
             if (string.IsNullOrWhiteSpace(isbn))
-                return false;
+                return true; // ISBN optional
 
             isbn = isbn.Replace("-", "").Replace(" ", "");
-            return (isbn.Length == 10 || isbn.Length == 13) && Regex.IsMatch(isbn, @"^\d+$");
+
+            if (isbn.Length == 10)
+                return ValidareISBN10(isbn);
+            else if (isbn.Length == 13)
+                return ValidareISBN13(isbn);
+            else
+                return false;
         }
 
-        /// <summary>
-        /// Validează o dată (nu poate fi în viitor)
-        /// </summary>
-        public static bool ValidareData(DateTime? data)
+        private static bool ValidareISBN10(string isbn)
         {
-            if (data == null)
-                return true; // Data opțională
-
-            return data.Value.Date <= DateTime.Now.Date;
+            int suma = 0;
+            for (int i = 0; i < 10; i++)
+            {
+                if (!int.TryParse(isbn[i].ToString(), out int digit))
+                    return false;
+                suma += digit * (10 - i);
+            }
+            return suma % 11 == 0;
         }
 
-        /// <summary>
-        /// Validează un an de publicare
-        /// </summary>
-        public static bool ValidareAn(int? an)
+        private static bool ValidareISBN13(string isbn)
         {
-            if (an == null)
-                return true; // An opțional
-
-            return an >= 1000 && an <= DateTime.Now.Year;
+            int suma = 0;
+            for (int i = 0; i < 13; i++)
+            {
+                if (!int.TryParse(isbn[i].ToString(), out int digit))
+                    return false;
+                suma += digit * (i % 2 == 0 ? 1 : 3);
+            }
+            return suma % 10 == 0;
         }
 
         /// <summary>
-        /// Validează numărul de pagini
+        /// Validează an publicării
         /// </summary>
-        public static bool ValidareNrPagini(int? nrPagini)
+        public static bool ValidareAnPublicare(int an)
         {
-            if (nrPagini == null)
-                return true; // Opțional
-
-            return nrPagini > 0;
+            int anCurent = DateTime.Now.Year;
+            return an >= 1000 && an <= anCurent + 1;
         }
 
         /// <summary>
-        /// Validează un preț
+        /// Validează număr de pagini
         /// </summary>
-        public static bool ValidarePret(decimal? pret)
+        public static bool ValidareNrPagini(int pagini)
         {
-            if (pret == null)
-                return true; // Opțional
-
-            return pret >= 0;
+            return pagini > 0 && pagini < 10000;
         }
 
         /// <summary>
-        /// Validează lungimea unui text
+        /// Validează preț
         /// </summary>
-        public static bool ValidareLungime(string text, int maxLungime)
+        public static bool ValidarePret(decimal pret)
+        {
+            return pret >= 0 && pret <= 999999.99m;
+        }
+
+        /// <summary>
+        /// Verifică dacă string este gol
+        /// </summary>
+        public static bool EsteGol(string text)
+        {
+            return string.IsNullOrWhiteSpace(text);
+        }
+
+        /// <summary>
+        /// Verifică lungimea string-ului
+        /// </summary>
+        public static bool ValidareLungime(string text, int min = 1, int max = 500)
         {
             if (string.IsNullOrWhiteSpace(text))
-                return true;
-
-            return text.Length <= maxLungime;
-        }
-
-        /// <summary>
-        /// Validează o clasă școlară (format: 5A, 9B, 12C etc)
-        /// </summary>
-        public static bool ValidareClasa(string clasa)
-        {
-            if (string.IsNullOrWhiteSpace(clasa))
                 return false;
-
-            return Regex.IsMatch(clasa.Trim(), @"^[5-9]|1[0-2])\s*[A-Z]?$");
+            return text.Length >= min && text.Length <= max;
         }
     }
 }

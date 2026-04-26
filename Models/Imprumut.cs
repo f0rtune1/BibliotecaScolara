@@ -13,8 +13,6 @@ namespace BibliotecaScolara.Models
         public string Status { get; set; }
         public string Observatii { get; set; }
         public DateTime DataAdaugarii { get; set; }
-
-        // Proprietăți pentru afișare în UI
         public string NumeElev { get; set; }
         public string TitluCarte { get; set; }
         public string CoduInventar { get; set; }
