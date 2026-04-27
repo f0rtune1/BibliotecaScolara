@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{A1B2C3D4-E5F6-7890-ABCD-EF1234567890}</ProjectGuid>
+    <OutputType>WinExe</OutputType>
+    <RootNamespace>BibliotecaScolara</RootNamespace>
+    <AssemblyName>BibliotecaScolara</AssemblyName>
+    <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
+    <Deterministic>true</Deterministic>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="System.Configuration" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Data.SqlClient" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Net.Mail" />
+    <Reference Include="System.Security" />
+    <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Xml" />
+    <Reference Include="System.Xml.Linq" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Database\DatabaseConnection.cs" />
+    <Compile Include="Managers\AutorManager.cs" />
+    <Compile Include="Managers\CarteManager.cs" />
+    <Compile Include="Managers\CategorieManager.cs" />
+    <Compile Include="Managers\EdituraManager.cs" />
+    <Compile Include="Managers\ElevManager.cs" />
+    <Compile Include="Managers\ExemplarManager.cs" />
+    <Compile Include="Managers\ImprumutManager.cs" />
+    <Compile Include="Managers\UtilizatorManager.cs" />
+    <Compile Include="Models\Autor.cs" />
+    <Compile Include="Models\Carte.cs" />
+    <Compile Include="Models\Categorie.cs" />
+    <Compile Include="Models\Editura.cs" />
+    <Compile Include="Models\Elev.cs" />
+    <Compile Include="Models\Exemplar.cs" />
+    <Compile Include="Models\Imprumut.cs" />
+    <Compile Include="Models\Utilizator.cs" />
+    <Compile Include="Program.cs" />
+    <Compile Include="UI\FrmAdaugaAutor.cs" />
+    <Compile Include="UI\FrmAdaugaCarte.cs" />
+    <Compile Include="UI\FrmAdaugaCategorie.cs" />
+    <Compile Include="UI\FrmAdaugaEditura.cs" />
+    <Compile Include="UI\FrmAdaugaElev.cs" />
+    <Compile Include="UI\FrmAdaugaExemplar.cs" />
+    <Compile Include="UI\FrmAdaugaImprumut.cs" />
+    <Compile Include="UI\FrmAutori.cs" />
+    <Compile Include="UI\FrmCarti.cs" />
+    <Compile Include="UI\FrmCategorii.cs" />
+    <Compile Include="UI\FrmEdituri.cs" />
+    <Compile Include="UI\FrmElevi.cs" />
+    <Compile Include="UI\FrmExemplare.cs" />
+    <Compile Include="UI\FrmImprumturi.cs" />
+    <Compile Include="UI\FrmLogin.cs" />
+    <Compile Include="UI\FrmMain.cs" />
+    <Compile Include="UI\FrmRaportIntarziate.cs" />
+    <Compile Include="UI\FrmReturnareImprumut.cs" />
+    <Compile Include="Utilities\Constante.cs" />
+    <Compile Include="Utilities\Mesaje.cs" />
+    <Compile Include="Utilities\Validari.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="App.config" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+</Project>

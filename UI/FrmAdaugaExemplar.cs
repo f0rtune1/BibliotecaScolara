@@ -1,4 +1,5 @@
 using System;
+using System.Drawing;
 using System.Windows.Forms;
 using BibliotecaScolara.Managers;
 using BibliotecaScolara.Models;
@@ -81,7 +82,7 @@ namespace BibliotecaScolara.UI
 
         private bool Valideaza()
         {
-            if (Validari.EsteGol(txtCod.Text);
+            if (Validari.EsteGol(txtCod.Text))
             {
                 Mesaje.Validare("Introduceți codul inventar!");
                 txtCod.Focus();

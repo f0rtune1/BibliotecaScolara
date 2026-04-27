@@ -1,4 +1,5 @@
 using System;
+using System.Drawing;
 using System.Windows.Forms;
 using BibliotecaScolara.Managers;
 using BibliotecaScolara.Models;
@@ -13,12 +14,20 @@ namespace BibliotecaScolara.UI
         public FrmAdaugaAutor(Autor autorEdit = null)
         {
             InitializeComponent();
+            ApplyTheme();
             autor = autorEdit ?? new Autor();
             if (autorEdit != null)
             {
                 PopulateForm();
                 this.Text = "Editare Autor";
             }
+        }
+
+        private void ApplyTheme()
+        {
+            ThemeHelper.ApplyTheme(this);
+            ThemeHelper.StyleButtonPrimary(btnSalveaza);
+            ThemeHelper.StyleButtonNeutral(btnAnuleaza);
         }
 
         private void PopulateForm()

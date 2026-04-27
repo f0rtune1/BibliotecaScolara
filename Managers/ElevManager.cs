@@ -48,8 +48,8 @@ namespace BibliotecaScolara.Managers
         public static bool Insert(Elev elev)
         {
             string query = @"
-                INSERT INTO Elevi (Nume, Prenume, Clasa, Email, Telefon, Status)
-                VALUES (@Nume, @Prenume, @Clasa, @Email, @Telefon, @Status)";
+                INSERT INTO Elevi (Nume, Prenume, Clasa, Email, Telefon, Status, DataInscrierii)
+                VALUES (@Nume, @Prenume, @Clasa, @Email, @Telefon, @Status, @DataInscrierii)";
 
             SqlParameter[] parameters = new[]
             {
@@ -58,7 +58,8 @@ namespace BibliotecaScolara.Managers
                 new SqlParameter("@Clasa", elev.Clasa ?? ""),
                 new SqlParameter("@Email", elev.Email ?? ""),
                 new SqlParameter("@Telefon", elev.Telefon ?? ""),
-                new SqlParameter("@Status", elev.Status ?? Constante.StareElev.ACTIV)
+                new SqlParameter("@Status", elev.Status ?? Constante.StareElev.ACTIV),
+                new SqlParameter("@DataInscrierii", DateTime.Today)
             };
 
             return DatabaseConnection.ExecuteNonQuery(query, parameters);

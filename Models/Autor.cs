@@ -12,9 +12,11 @@ namespace BibliotecaScolara.Models
         public string BiografieBrieșă { get; set; }
         public DateTime DataAdaugarii { get; set; }
 
+        public string NumeComplet => $"{Nume} {Prenume}";
+
         public override string ToString()
         {
-            return $"{Nume} {Prenume}";
+            return NumeComplet;
         }
     }
 }

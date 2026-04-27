@@ -22,16 +22,22 @@ namespace BibliotecaScolara
             {
                 Mesaje.Eroare(
                     "Eroare de conexiune la baza de date!\n\n" +
-                    "Asigură-te că:\n" +
+                    "Asigura-te ca:\n" +
                     "1. SQL Server este pornit\n" +
                     "2. Connection string din App.config este corect\n" +
-                    "3. Baza de date 'BibliotecaScolara' există",
-                    "Eroare Bază de Date"
+                    "3. Baza de date 'BibliotecaScolara' exista",
+                    "Eroare Baza de Date"
                 );
                 return;
             }
 
-            Application.Run(new FrmMain());
+            // Show login form
+            FrmLogin loginForm = new FrmLogin();
+            if (loginForm.ShowDialog() != DialogResult.OK)
+                return;
+
+            FrmMain mainForm = new FrmMain(loginForm.UtilizatorAutentificat);
+            Application.Run(mainForm);
         }
     }
 }

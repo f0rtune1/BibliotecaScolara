@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.Windows.Forms;
 using BibliotecaScolara.Managers;
 using BibliotecaScolara.Models;
@@ -17,6 +18,7 @@ namespace BibliotecaScolara.UI
         public FrmAdaugaCarte(List<Autor> autori, List<Editura> edituri, List<Categorie> categorii, Carte carteEdit = null)
         {
             InitializeComponent();
+            ApplyTheme();
             autoriList = autori;
             edituriList = edituri;
             categoriiList = categorii;
@@ -29,10 +31,18 @@ namespace BibliotecaScolara.UI
             }
         }
 
+        private void ApplyTheme()
+        {
+            ThemeHelper.ApplyTheme(this);
+            ThemeHelper.StyleButtonPrimary(btnSalveaza);
+            ThemeHelper.StyleButtonNeutral(btnAnuleaza);
+            this.BackColor = ThemeHelper.FormBackground;
+        }
+
         private void LoadComboBoxes()
         {
             cmbAutor.DataSource = autoriList;
-            cmbAutor.DisplayMember = "Prenume";
+            cmbAutor.DisplayMember = "NumeComplet";
             cmbAutor.ValueMember = "IDAutor";
 
             cmbEditura.DataSource = edituriList;

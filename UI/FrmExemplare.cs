@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.Windows.Forms;
 using BibliotecaScolara.Managers;
 using BibliotecaScolara.Models;
@@ -12,20 +13,42 @@ namespace BibliotecaScolara.UI
         private int carteId;
         private List<Exemplar> exemplareList;
 
+        // No-arg constructor - shows all exemplars
+        public FrmExemplare() : this(0) { }
+
         public FrmExemplare(int idCarte)
         {
             InitializeComponent();
+            ApplyTheme();
             carteId = idCarte;
             LoadExemplare();
+        }
+
+        private void ApplyTheme()
+        {
+            ThemeHelper.ApplyTheme(this);
+            ThemeHelper.StyleGrid(dataGridViewExemplare);
+            ThemeHelper.StyleButtonAdd(btnAdauga);
+            ThemeHelper.StyleButtonEdit(btnEditeaza);
+            ThemeHelper.StyleButtonDelete(btnSterge);
+            ThemeHelper.StyleButtonNeutral(btnInchide);
         }
 
         private void LoadExemplare()
         {
             try
             {
-                exemplareList = ExemplarManager.GetByCarte(carteId);
+                if (carteId > 0)
+                    exemplareList = ExemplarManager.GetByCarte(carteId);
+                else
+                    exemplareList = ExemplarManager.GetAll();
                 RefreshGrid();
-                this.Text = exemplareList.Count > 0 ? exemplareList[0].TitluCarte + " - Exemplare" : "Exemplare";
+                if (carteId > 0 && exemplareList.Count > 0)
+                    this.Text = exemplareList[0].TitluCarte + " - Exemplare";
+                else if (carteId == 0)
+                    this.Text = "Toate Exemplarele";
+                else
+                    this.Text = "Exemplare";
             }
             catch (Exception ex)
             {

@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.Windows.Forms;
 using BibliotecaScolara.Managers;
 using BibliotecaScolara.Models;
@@ -14,7 +15,23 @@ namespace BibliotecaScolara.UI
         public FrmElevi()
         {
             InitializeComponent();
+            ApplyTheme();
             LoadElevi();
+        }
+
+        private void ApplyTheme()
+        {
+            ThemeHelper.ApplyTheme(this);
+            ThemeHelper.StyleGrid(dataGridViewElevi);
+            ThemeHelper.StyleButtonAdd(btnAdauga);
+            ThemeHelper.StyleButtonEdit(btnEditeaza);
+            ThemeHelper.StyleButtonDelete(btnSterge);
+            ThemeHelper.StyleButtonPrimary(btnImprumuri);
+
+            Panel header = ThemeHelper.CreateHeaderPanel(this, "Gestionare Elevi");
+            this.Controls.Add(header);
+            header.BringToFront();
+            dataGridViewElevi.Location = new System.Drawing.Point(12, 80);
         }
 
         private void LoadElevi()
@@ -208,7 +225,7 @@ namespace BibliotecaScolara.UI
             }
 
             Elev elev = (Elev)dataGridViewElevi.SelectedRows[0].DataBoundItem;
-            FrmImprumuri frm = new FrmImprumturi(elev.IDElev);
+            FrmImprumturi frm = new FrmImprumturi(elev.IDElev);
             frm.ShowDialog();
         }
 
