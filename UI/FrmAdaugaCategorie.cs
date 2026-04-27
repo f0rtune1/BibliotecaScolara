@@ -1,4 +1,5 @@
 using System;
+using System.Drawing;
 using System.Windows.Forms;
 using BibliotecaScolara.Managers;
 using BibliotecaScolara.Models;
@@ -13,12 +14,20 @@ namespace BibliotecaScolara.UI
         public FrmAdaugaCategorie(Categorie catEdit = null)
         {
             InitializeComponent();
+            ApplyTheme();
             categorie = catEdit ?? new Categorie();
             if (catEdit != null)
             {
                 PopulateForm();
                 this.Text = "Editare Categorie";
             }
+        }
+
+        private void ApplyTheme()
+        {
+            ThemeHelper.ApplyTheme(this);
+            ThemeHelper.StyleButtonPrimary(btnSalveaza);
+            ThemeHelper.StyleButtonNeutral(btnAnuleaza);
         }
 
         private void PopulateForm()

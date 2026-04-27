@@ -1,4 +1,5 @@
 using System;
+using System.Drawing;
 using System.Windows.Forms;
 using BibliotecaScolara.Managers;
 using BibliotecaScolara.Models;
@@ -13,6 +14,7 @@ namespace BibliotecaScolara.UI
         public FrmAdaugaElev(Elev elevEdit = null)
         {
             InitializeComponent();
+            ApplyTheme();
             elev = elevEdit ?? new Elev();
             LoadClase();
             if (elevEdit != null)
@@ -20,6 +22,13 @@ namespace BibliotecaScolara.UI
                 PopulateForm();
                 this.Text = "Editare Elev";
             }
+        }
+
+        private void ApplyTheme()
+        {
+            ThemeHelper.ApplyTheme(this);
+            ThemeHelper.StyleButtonPrimary(btnSalveaza);
+            ThemeHelper.StyleButtonNeutral(btnAnuleaza);
         }
 
         private void LoadClase()

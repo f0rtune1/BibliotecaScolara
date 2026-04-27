@@ -91,7 +91,7 @@ BEGIN
         IDEditura INT NOT NULL,
         IDCategorie INT NOT NULL,
         AnPublicarii INT NULL,
-        ISBN NVARCHAR(20) UNIQUE NOT NULL,
+        ISBN NVARCHAR(20) UNIQUE NULL,
         NrPagini INT NULL,
         DataAdaugarii DATETIME DEFAULT GETDATE(),
         FOREIGN KEY (IDAutor) REFERENCES Autori(IDAutor),
@@ -136,7 +136,7 @@ BEGIN
         Clasa NVARCHAR(20) NOT NULL,
         Email NVARCHAR(100) UNIQUE NULL,
         Telefon NVARCHAR(20) NULL,
-        DataInscrierii DATE NOT NULL,
+        DataInscrierii DATE NOT NULL DEFAULT GETDATE(),
         Status NVARCHAR(20) DEFAULT 'Activ',
         DataAdaugarii DATETIME DEFAULT GETDATE()
     );

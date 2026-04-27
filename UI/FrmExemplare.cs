@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.Windows.Forms;
 using BibliotecaScolara.Managers;
 using BibliotecaScolara.Models;
@@ -18,8 +19,19 @@ namespace BibliotecaScolara.UI
         public FrmExemplare(int idCarte)
         {
             InitializeComponent();
+            ApplyTheme();
             carteId = idCarte;
             LoadExemplare();
+        }
+
+        private void ApplyTheme()
+        {
+            ThemeHelper.ApplyTheme(this);
+            ThemeHelper.StyleGrid(dataGridViewExemplare);
+            ThemeHelper.StyleButtonAdd(btnAdauga);
+            ThemeHelper.StyleButtonEdit(btnEditeaza);
+            ThemeHelper.StyleButtonDelete(btnSterge);
+            ThemeHelper.StyleButtonNeutral(btnInchide);
         }
 
         private void LoadExemplare()

@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.Windows.Forms;
 using BibliotecaScolara.Managers;
 using BibliotecaScolara.Models;
@@ -14,7 +15,22 @@ namespace BibliotecaScolara.UI
         public FrmEdituri()
         {
             InitializeComponent();
+            ApplyTheme();
             LoadEdituri();
+        }
+
+        private void ApplyTheme()
+        {
+            ThemeHelper.ApplyTheme(this);
+            ThemeHelper.StyleGrid(dataGridViewEdituri);
+            ThemeHelper.StyleButtonAdd(btnAdauga);
+            ThemeHelper.StyleButtonEdit(btnModifica);
+            ThemeHelper.StyleButtonDelete(btnSterge);
+
+            Panel header = ThemeHelper.CreateHeaderPanel(this, "Gestionare Edituri");
+            this.Controls.Add(header);
+            header.BringToFront();
+            dataGridViewEdituri.Location = new System.Drawing.Point(12, 80);
         }
 
         private void LoadEdituri()

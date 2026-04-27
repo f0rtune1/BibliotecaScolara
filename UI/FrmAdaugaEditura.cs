@@ -1,4 +1,5 @@
 using System;
+using System.Drawing;
 using System.Windows.Forms;
 using BibliotecaScolara.Managers;
 using BibliotecaScolara.Models;
@@ -14,6 +15,7 @@ namespace BibliotecaScolara.UI
         public FrmAdaugaEditura(Editura ed = null)
         {
             InitializeComponent();
+            ApplyTheme();
             if (ed != null)
             {
                 editura = ed;
@@ -26,6 +28,13 @@ namespace BibliotecaScolara.UI
             {
                 editura = new Editura();
             }
+        }
+
+        private void ApplyTheme()
+        {
+            ThemeHelper.ApplyTheme(this);
+            ThemeHelper.StyleButtonPrimary(btnSalveaza);
+            ThemeHelper.StyleButtonNeutral(btnAnuleaza);
         }
 
         private void PopulateForm()

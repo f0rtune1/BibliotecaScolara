@@ -14,9 +14,11 @@ namespace BibliotecaScolara.Models
         public string Status { get; set; }
         public DateTime DataAdaugarii { get; set; }
 
+        public string NumeComplet => $"{Nume} {Prenume} ({Clasa})";
+
         public override string ToString()
         {
-            return $"{Nume} {Prenume} ({Clasa})";
+            return NumeComplet;
         }
     }
 }

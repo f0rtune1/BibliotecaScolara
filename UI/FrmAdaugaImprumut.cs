@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.Windows.Forms;
 using BibliotecaScolara.Managers;
 using BibliotecaScolara.Models;
@@ -16,7 +17,15 @@ namespace BibliotecaScolara.UI
         public FrmAdaugaImprumut()
         {
             InitializeComponent();
+            ApplyTheme();
             LoadData();
+        }
+
+        private void ApplyTheme()
+        {
+            ThemeHelper.ApplyTheme(this);
+            ThemeHelper.StyleButtonAdd(btnSalveaza);
+            ThemeHelper.StyleButtonNeutral(btnAnuleaza);
         }
 
         private void LoadData()
@@ -27,7 +36,7 @@ namespace BibliotecaScolara.UI
                 cartiList = CarteManager.GetAll();
 
                 cmbElev.DataSource = eleviList;
-                cmbElev.DisplayMember = "Prenume";
+                cmbElev.DisplayMember = "NumeComplet";
                 cmbElev.ValueMember = "IDElev";
 
                 cmbCarte.DataSource = cartiList;

@@ -16,8 +16,25 @@ namespace BibliotecaScolara.UI
         public FrmImprumturi(int? elevId = null)
         {
             InitializeComponent();
+            ApplyTheme();
             elevIdFilter = elevId;
             LoadImprumturi();
+        }
+
+        private void ApplyTheme()
+        {
+            ThemeHelper.ApplyTheme(this);
+            ThemeHelper.StyleGrid(dataGridViewImprumturi);
+            ThemeHelper.StyleButtonAdd(btnAdauga);
+            ThemeHelper.StyleButtonNeutral(btnReturneaza);
+            ThemeHelper.StyleButtonWarning(btnPrelungeste);
+            ThemeHelper.StyleButtonDelete(btnSterge);
+            ThemeHelper.StyleButtonEdit(btnIntarziate);
+
+            Panel header = ThemeHelper.CreateHeaderPanel(this, "Gestionare Împrumuturi");
+            this.Controls.Add(header);
+            header.BringToFront();
+            dataGridViewImprumturi.Location = new System.Drawing.Point(12, 80);
         }
 
         private void LoadImprumturi()
