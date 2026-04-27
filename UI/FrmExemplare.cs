@@ -12,6 +12,9 @@ namespace BibliotecaScolara.UI
         private int carteId;
         private List<Exemplar> exemplareList;
 
+        // No-arg constructor - shows all exemplars
+        public FrmExemplare() : this(0) { }
+
         public FrmExemplare(int idCarte)
         {
             InitializeComponent();
@@ -23,9 +26,17 @@ namespace BibliotecaScolara.UI
         {
             try
             {
-                exemplareList = ExemplarManager.GetByCarte(carteId);
+                if (carteId > 0)
+                    exemplareList = ExemplarManager.GetByCarte(carteId);
+                else
+                    exemplareList = ExemplarManager.GetAll();
                 RefreshGrid();
-                this.Text = exemplareList.Count > 0 ? exemplareList[0].TitluCarte + " - Exemplare" : "Exemplare";
+                if (carteId > 0 && exemplareList.Count > 0)
+                    this.Text = exemplareList[0].TitluCarte + " - Exemplare";
+                else if (carteId == 0)
+                    this.Text = "Toate Exemplarele";
+                else
+                    this.Text = "Exemplare";
             }
             catch (Exception ex)
             {

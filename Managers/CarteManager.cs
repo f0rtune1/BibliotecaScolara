@@ -17,7 +17,7 @@ namespace BibliotecaScolara.Managers
         {
             List<Carte> carti = new List<Carte>();
             string query = @"
-                SELECT c.*, a.Prenume AS NumeAutor, ed.NumeEditura, cat.NumeCategorie
+                SELECT c.*, a.Nume + ' ' + a.Prenume AS NumeAutor, ed.NumeEditura, cat.NumeCategorie
                 FROM Carti c
                 JOIN Autori a ON c.IDAutor = a.IDAutor
                 JOIN Edituri ed ON c.IDEditura = ed.IDEditura
@@ -38,7 +38,7 @@ namespace BibliotecaScolara.Managers
         public static Carte GetByID(int id)
         {
             string query = @"
-                SELECT c.*, a.Prenume AS NumeAutor, ed.NumeEditura, cat.NumeCategorie
+                SELECT c.*, a.Nume + ' ' + a.Prenume AS NumeAutor, ed.NumeEditura, cat.NumeCategorie
                 FROM Carti c
                 JOIN Autori a ON c.IDAutor = a.IDAutor
                 JOIN Edituri ed ON c.IDEditura = ed.IDEditura
@@ -122,12 +122,12 @@ namespace BibliotecaScolara.Managers
         {
             List<Carte> carti = new List<Carte>();
             string query = @"
-                SELECT c.*, a.Prenume AS NumeAutor, ed.NumeEditura, cat.NumeCategorie
+                SELECT c.*, a.Nume + ' ' + a.Prenume AS NumeAutor, ed.NumeEditura, cat.NumeCategorie
                 FROM Carti c
                 JOIN Autori a ON c.IDAutor = a.IDAutor
                 JOIN Edituri ed ON c.IDEditura = ed.IDEditura
                 JOIN Categorii cat ON c.IDCategorie = cat.IDCategorie
-                WHERE c.Titlu LIKE @Search OR a.Prenume LIKE @Search OR c.ISBN LIKE @Search
+                WHERE c.Titlu LIKE @Search OR a.Nume LIKE @Search OR a.Prenume LIKE @Search OR c.ISBN LIKE @Search
                 ORDER BY c.Titlu";
 
             SqlParameter[] parameters = new[] { new SqlParameter("@Search", "%" + searchTerm + "%") };
@@ -147,7 +147,7 @@ namespace BibliotecaScolara.Managers
         {
             List<Carte> carti = new List<Carte>();
             string query = @"
-                SELECT c.*, a.Prenume AS NumeAutor, ed.NumeEditura, cat.NumeCategorie
+                SELECT c.*, a.Nume + ' ' + a.Prenume AS NumeAutor, ed.NumeEditura, cat.NumeCategorie
                 FROM Carti c
                 JOIN Autori a ON c.IDAutor = a.IDAutor
                 JOIN Edituri ed ON c.IDEditura = ed.IDEditura

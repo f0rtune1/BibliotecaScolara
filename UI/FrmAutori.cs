@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.Windows.Forms;
 using BibliotecaScolara.Managers;
 using BibliotecaScolara.Models;
@@ -14,7 +15,22 @@ namespace BibliotecaScolara.UI
         public FrmAutori()
         {
             InitializeComponent();
+            ApplyTheme();
             LoadAutori();
+        }
+
+        private void ApplyTheme()
+        {
+            ThemeHelper.ApplyTheme(this);
+            ThemeHelper.StyleGrid(dataGridViewAutori);
+            ThemeHelper.StyleButtonAdd(btnAdauga);
+            ThemeHelper.StyleButtonEdit(btnEditeaza);
+            ThemeHelper.StyleButtonDelete(btnSterge);
+
+            Panel header = ThemeHelper.CreateHeaderPanel(this, "Gestionare Autori");
+            this.Controls.Add(header);
+            header.BringToFront();
+            dataGridViewAutori.Location = new System.Drawing.Point(12, 80);
         }
 
         private void LoadAutori()

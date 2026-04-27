@@ -81,7 +81,7 @@ namespace BibliotecaScolara.UI
 
         private bool Valideaza()
         {
-            if (Validari.EsteGol(txtCod.Text);
+            if (Validari.EsteGol(txtCod.Text))
             {
                 Mesaje.Validare("Introduceți codul inventar!");
                 txtCod.Focus();

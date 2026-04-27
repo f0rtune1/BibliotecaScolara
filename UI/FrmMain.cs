@@ -1,14 +1,24 @@
 using System;
+using System.Drawing;
 using System.Windows.Forms;
+using BibliotecaScolara.Models;
 using BibliotecaScolara.UI;
 
 namespace BibliotecaScolara.UI
 {
     public partial class FrmMain : Form
     {
-        public FrmMain()
+        private Utilizator utilizatorCurent;
+
+        public FrmMain(Utilizator utilizator = null)
         {
             InitializeComponent();
+            utilizatorCurent = utilizator;
+            if (utilizatorCurent != null)
+            {
+                this.Text = "Biblioteca Scolara - " + utilizatorCurent.NumeUtilizator +
+                            " [" + utilizatorCurent.Rol + "]";
+            }
         }
 
         private void AutoriToolStripMenuItem_Click(object sender, EventArgs e)

@@ -224,6 +224,16 @@ namespace BibliotecaScolara.Managers
         }
 
         /// <summary>
+        /// Șterge un împrumut (cu verificare)
+        /// </summary>
+        public static bool Delete(int id)
+        {
+            string query = "DELETE FROM Imprumturi WHERE IDImprumut = @ID";
+            SqlParameter[] parameters = new[] { new SqlParameter("@ID", id) };
+            return DatabaseConnection.ExecuteNonQuery(query, parameters);
+        }
+
+        /// <summary>
         /// Obține statistici împrumuturi
         /// </summary>
         public static DataTable GetStatistics()

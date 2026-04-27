@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.Windows.Forms;
 using BibliotecaScolara.Managers;
 using BibliotecaScolara.Models;
@@ -125,6 +126,40 @@ namespace BibliotecaScolara.UI
             }
         }
 
+        private void BtnSterge_Click(object sender, EventArgs e)
+        {
+            if (dataGridViewImprumturi.SelectedRows.Count == 0)
+            {
+                Mesaje.Avertisment("Selectați un împrumut!");
+                return;
+            }
+
+            Imprumut imprumut = (Imprumut)dataGridViewImprumturi.SelectedRows[0].DataBoundItem;
+            if (!imprumut.DataRestituire.HasValue)
+            {
+                Mesaje.Avertisment("Nu puteți șterge un împrumut activ! Returnați cartea mai întâi.");
+                return;
+            }
+
+            if (Mesaje.ConfirmareSt() == DialogResult.Yes)
+            {
+                try
+                {
+                    if (ImprumutManager.Delete(imprumut.IDImprumut))
+                    {
+                        LoadImprumturi();
+                        Mesaje.Succes("Împrumutul a fost șters cu succes!");
+                    }
+                    else
+                        Mesaje.Eroare("Nu s-a putut șterge împrumutul!");
+                }
+                catch (Exception ex)
+                {
+                    Mesaje.Eroare(ex.Message);
+                }
+            }
+        }
+
         private void BtnIntarziate_Click(object sender, EventArgs e)
         {
             try
@@ -158,6 +193,7 @@ namespace BibliotecaScolara.UI
             this.btnAdauga = new Button();
             this.btnReturneaza = new Button();
             this.btnPrelungeste = new Button();
+            this.btnSterge = new Button();
             this.btnIntarziate = new Button();
             this.txtCauta = new TextBox();
             this.lblCauta = new Label();
@@ -188,32 +224,40 @@ namespace BibliotecaScolara.UI
 
             this.btnAdauga.Location = new System.Drawing.Point(12, 410);
             this.btnAdauga.Name = "btnAdauga";
-            this.btnAdauga.Size = new System.Drawing.Size(75, 23);
+            this.btnAdauga.Size = new System.Drawing.Size(80, 23);
             this.btnAdauga.TabIndex = 3;
             this.btnAdauga.Text = "Imprumuta";
             this.btnAdauga.UseVisualStyleBackColor = true;
             this.btnAdauga.Click += new EventHandler(this.BtnAdauga_Click);
 
-            this.btnReturneaza.Location = new System.Drawing.Point(93, 410);
+            this.btnReturneaza.Location = new System.Drawing.Point(98, 410);
             this.btnReturneaza.Name = "btnReturneaza";
-            this.btnReturneaza.Size = new System.Drawing.Size(75, 23);
+            this.btnReturneaza.Size = new System.Drawing.Size(80, 23);
             this.btnReturneaza.TabIndex = 4;
             this.btnReturneaza.Text = "Returneaza";
             this.btnReturneaza.UseVisualStyleBackColor = true;
             this.btnReturneaza.Click += new EventHandler(this.BtnReturneaza_Click);
 
-            this.btnPrelungeste.Location = new System.Drawing.Point(174, 410);
+            this.btnPrelungeste.Location = new System.Drawing.Point(184, 410);
             this.btnPrelungeste.Name = "btnPrelungeste";
-            this.btnPrelungeste.Size = new System.Drawing.Size(75, 23);
+            this.btnPrelungeste.Size = new System.Drawing.Size(85, 23);
             this.btnPrelungeste.TabIndex = 5;
             this.btnPrelungeste.Text = "Prelungeste";
             this.btnPrelungeste.UseVisualStyleBackColor = true;
             this.btnPrelungeste.Click += new EventHandler(this.BtnPrelungeste_Click);
 
-            this.btnIntarziate.Location = new System.Drawing.Point(255, 410);
+            this.btnSterge.Location = new System.Drawing.Point(275, 410);
+            this.btnSterge.Name = "btnSterge";
+            this.btnSterge.Size = new System.Drawing.Size(75, 23);
+            this.btnSterge.TabIndex = 6;
+            this.btnSterge.Text = "Sterge";
+            this.btnSterge.UseVisualStyleBackColor = true;
+            this.btnSterge.Click += new EventHandler(this.BtnSterge_Click);
+
+            this.btnIntarziate.Location = new System.Drawing.Point(356, 410);
             this.btnIntarziate.Name = "btnIntarziate";
-            this.btnIntarziate.Size = new System.Drawing.Size(90, 23);
-            this.btnIntarziate.TabIndex = 6;
+            this.btnIntarziate.Size = new System.Drawing.Size(100, 23);
+            this.btnIntarziate.TabIndex = 7;
             this.btnIntarziate.Text = "Cărți Întârziate";
             this.btnIntarziate.UseVisualStyleBackColor = true;
             this.btnIntarziate.Click += new EventHandler(this.BtnIntarziate_Click);
@@ -222,6 +266,7 @@ namespace BibliotecaScolara.UI
             this.AutoScaleMode = AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(784, 445);
             this.Controls.Add(this.btnIntarziate);
+            this.Controls.Add(this.btnSterge);
             this.Controls.Add(this.btnPrelungeste);
             this.Controls.Add(this.btnReturneaza);
             this.Controls.Add(this.btnAdauga);
@@ -240,6 +285,7 @@ namespace BibliotecaScolara.UI
         private Button btnAdauga;
         private Button btnReturneaza;
         private Button btnPrelungeste;
+        private Button btnSterge;
         private Button btnIntarziate;
         private TextBox txtCauta;
         private Label lblCauta;

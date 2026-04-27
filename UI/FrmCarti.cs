@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.Windows.Forms;
 using BibliotecaScolara.Managers;
 using BibliotecaScolara.Models;
@@ -17,7 +18,28 @@ namespace BibliotecaScolara.UI
         public FrmCarti()
         {
             InitializeComponent();
+            ApplyTheme();
             LoadData();
+        }
+
+        private void ApplyTheme()
+        {
+            ThemeHelper.ApplyTheme(this);
+            ThemeHelper.StyleGrid(dataGridViewCarti);
+            ThemeHelper.StyleButtonAdd(btnAdauga);
+            ThemeHelper.StyleButtonEdit(btnEditeaza);
+            ThemeHelper.StyleButtonDelete(btnSterge);
+            ThemeHelper.StyleButtonNeutral(btnExemplar);
+            lblCauta.Font = new System.Drawing.Font("Segoe UI", 9F);
+            txtCauta.Font = new System.Drawing.Font("Segoe UI", 9F);
+
+            // Header panel
+            Panel header = ThemeHelper.CreateHeaderPanel(this, "Gestionare Carti");
+            this.Controls.Add(header);
+            header.BringToFront();
+
+            // Adjust grid position to account for header
+            dataGridViewCarti.Location = new System.Drawing.Point(12, 80);
         }
 
         private void LoadData()

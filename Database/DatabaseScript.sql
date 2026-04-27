@@ -13,6 +13,25 @@ USE BibliotecaScolara;
 GO
 
 -- =====================================================
+-- TABEL 0: UTILIZATORI (pentru autentificare)
+-- =====================================================
+IF NOT EXISTS (SELECT * FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_NAME = 'Utilizatori')
+BEGIN
+    CREATE TABLE Utilizatori (
+        IDUtilizator INT PRIMARY KEY IDENTITY(1,1),
+        NumeUtilizator NVARCHAR(50) NOT NULL UNIQUE,
+        ParolaHash NVARCHAR(255) NOT NULL,
+        Rol NVARCHAR(20) NOT NULL DEFAULT 'bibliotecar',
+        Email NVARCHAR(100) NULL,
+        DataAdaugarii DATETIME DEFAULT GETDATE()
+    );
+    -- Insert default admin user (password: admin123)
+    INSERT INTO Utilizatori (NumeUtilizator, ParolaHash, Rol, Email)
+    VALUES ('admin', '240be518fabd2724ddb6f04eeb1da5967448d7e831c08c8fa822809f74c720a9', 'admin', 'admin@biblioteca.ro');
+END
+GO
+
+-- =====================================================
 -- TABEL 1: AUTORI
 -- =====================================================
 IF NOT EXISTS (SELECT * FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_NAME = 'Autori')
