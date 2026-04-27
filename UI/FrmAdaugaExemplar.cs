@@ -15,6 +15,7 @@ namespace BibliotecaScolara.UI
         public FrmAdaugaExemplar(int idCarte, Exemplar exemplarEdit = null)
         {
             InitializeComponent();
+            ApplyTheme();
             carteId = idCarte;
             exemplar = exemplarEdit ?? new Exemplar { IDCarte = idCarte, DataAchizitiei = DateTime.Today };
             LoadStari();
@@ -23,6 +24,13 @@ namespace BibliotecaScolara.UI
                 PopulateForm();
                 this.Text = "Editare Exemplar";
             }
+        }
+
+        private void ApplyTheme()
+        {
+            ThemeHelper.ApplyTheme(this);
+            ThemeHelper.StyleButtonPrimary(btnSalveaza);
+            ThemeHelper.StyleButtonNeutral(btnAnuleaza);
         }
 
         private void LoadStari()

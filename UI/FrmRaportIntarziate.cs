@@ -1,7 +1,9 @@
 using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.Windows.Forms;
 using BibliotecaScolara.Models;
+using BibliotecaScolara.Utilities;
 
 namespace BibliotecaScolara.UI
 {
@@ -12,8 +14,21 @@ namespace BibliotecaScolara.UI
         public FrmRaportIntarziate(List<Imprumut> intarziate)
         {
             InitializeComponent();
+            ApplyTheme();
             imprumturiIntarziate = intarziate;
             LoadData();
+        }
+
+        private void ApplyTheme()
+        {
+            ThemeHelper.ApplyTheme(this);
+            ThemeHelper.StyleGrid(dataGridViewIntarziate);
+            ThemeHelper.StyleButtonNeutral(btnInchide);
+
+            Panel header = ThemeHelper.CreateHeaderPanel(this, "Raport Cărți Întârziate");
+            this.Controls.Add(header);
+            header.BringToFront();
+            dataGridViewIntarziate.Location = new System.Drawing.Point(12, 55);
         }
 
         private void LoadData()

@@ -84,6 +84,7 @@
     <Compile Include="UI\FrmReturnareImprumut.cs" />
     <Compile Include="Utilities\Constante.cs" />
     <Compile Include="Utilities\Mesaje.cs" />
+    <Compile Include="Utilities\ThemeHelper.cs" />
     <Compile Include="Utilities\Validari.cs" />
   </ItemGroup>
   <ItemGroup>

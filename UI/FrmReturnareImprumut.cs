@@ -1,4 +1,5 @@
 using System;
+using System.Drawing;
 using System.Windows.Forms;
 using BibliotecaScolara.Models;
 using BibliotecaScolara.Managers;
@@ -13,8 +14,16 @@ namespace BibliotecaScolara.UI
         public FrmReturnareImprumut(Imprumut imp)
         {
             InitializeComponent();
+            ApplyTheme();
             imprumut = imp;
             PopulateForm();
+        }
+
+        private void ApplyTheme()
+        {
+            ThemeHelper.ApplyTheme(this);
+            ThemeHelper.StyleButtonAdd(btnConfirma);
+            ThemeHelper.StyleButtonNeutral(btnAnuleaza);
         }
 
         private void PopulateForm()
